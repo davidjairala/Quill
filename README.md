@@ -29,9 +29,11 @@ You can set up the following configuration options:
     page_method_name  - page method name (page by defualt)
     param_name        - param name (page by default)
     cache_page        - determines if Quill will cache page and count results (true by default)
+    cache_expires_in  - cache time to live
 
 ## TODO
 
+* Read the cache instead of computing everytime
 * Caching for the per method is not ready yet, need to figure it out still.
 * View generators for the pagination fragments.
 

@@ -5,7 +5,7 @@ describe Quill::ActiveRecordExtension do
   let(:users) { [] }
 
   before do
-    (1..100).each do |n|
+    (1..105).each do |n|
       users << User.create!(:name => "user-#{n}")
     end
   end
@@ -15,16 +15,38 @@ describe Quill::ActiveRecordExtension do
     describe "total_count" do
 
       it "should correctly get the total number of items in the set" do
-        User.page(1).total_count.should eql(100)
+        User.page(6).total_count.should eql(105)
       end
 
       it "should only run the count query once per instance" do
-        ActiveRecord::Relation.any_instance.expects(:count).returns(100).once
+        ActiveRecord::Relation.any_instance.expects(:count).returns(105).once
 
         page = User.page(1)
 
-        page.total_count.should eql(100)
-        page.total_count.should eql(100)
+        page.total_count.should eql(105)
+        page.total_count.should eql(105)
+      end
+
+    end
+
+    describe "previous and next page" do
+
+      it "should correctly determine if there is a next page" do
+        User.page(1).next_page?.should be_true
+        User.page(6).next_page?.should be_false
+      end
+
+      it "should only count via DB once when checking for next page multiple times" do
+        ActiveRecord::Relation.any_instance.expects(:count).returns(105).once
+
+        page = User.page(1)
+        page.next_page?.should be_true
+        page.next_page?.should be_true
+      end
+
+      it "should correctly determine if there is a previous page" do
+        User.page(2).previous_page?.should be_true
+        User.page(1).previous_page?.should be_false
       end
 
     end
@@ -73,21 +95,11 @@ describe Quill::ActiveRecordExtension do
     end
 
     it "should correctly get the total number of pages in the set" do
-      User.page(1).total_pages.should eql(5)
+      User.page(1).total_pages.should eql(6)
     end
 
     it "should allow overriding the number of results per page" do
       User.page(1).per(10).size.should eql(10)
-    end
-
-    it "should correctly determine if there is a next page" do
-      User.page(1).next_page?.should be_true
-      User.page(5).next_page?.should be_false
-    end
-
-    it "should correctly determine if there is a previous page" do
-      User.page(2).previous_page?.should be_true
-      User.page(1).previous_page?.should be_false
     end
 
     it "should correctly get a page of users" do

@@ -1,4 +1,4 @@
-require 'active_support/configurable'
+require 'active_support/all'
 
 module Quill
   # Global settings
@@ -19,6 +19,7 @@ module Quill
     config_accessor :default_per_page
     config_accessor :page_method_name
     config_accessor :cache_page
+    config_accessor :cache_expires_in
 
     def param_name
       config.param_name.respond_to?(:call) ? config.param_name.call : config.param_name
@@ -31,9 +32,10 @@ module Quill
   end
 
   configure do |config|
-    config.default_per_page = 20
-    config.page_method_name = :page
-    config.param_name = :page
-    config.cache_page = true
+    config.default_per_page   = 20
+    config.page_method_name   = :page
+    config.param_name         = :page
+    config.cache_page         = true
+    config.cache_expires_in   = 1.hour
   end
 end

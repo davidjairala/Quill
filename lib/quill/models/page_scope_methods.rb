@@ -46,7 +46,11 @@ module Quill
 
     # Determines if there is a next page
     def next_page?
-      @next_page ||= limit(1).offset((big_window * ([current_page.to_i, 1].max - 1)) + default_per_page).any?
+      @next_page ||= except(:order, :includes).
+                      limit(1).
+                      offset((big_window * ([current_page.to_i, 1].max - 1)) + default_per_page).
+                      any?
+
       @next_page
     end
 

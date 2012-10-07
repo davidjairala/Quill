@@ -4,6 +4,11 @@ module Quill
 
     module ClassMethods
 
+      # Cache TTL
+      def expires_in
+        @_default_expires_in ||= Quill.config.cache_expires_in
+      end
+
       # The models' default +cache_page+ value
       def cache_page
         @_default_cache_page ||= Quill.config.cache_page
@@ -19,12 +24,8 @@ module Quill
         options = args.extract_options!
         page    = options.delete(:page) || 1
         per     = options.delete(:per)  || default_per_page
-        
-        klass   = self.first.class  if self.is_a?(ActiveRecord::Relation)
-        klass   = self              if self.is_a?(Class)
-        klass   ||= self.class
 
-        "q_#{klass.table_name}_#{page}_#{per}"
+        "q_#{self.table_name}_#{page}_#{per}"
       end
 
       # Set the cache if needed
@@ -34,7 +35,7 @@ module Quill
           results   = args.first
 
           key = cache_key(results, options)
-          Rails.cache.write(key, results)
+          Rails.cache.write(key, results, :time_to_live => expires_in)
           key
         end
       end
@@ -43,7 +44,7 @@ module Quill
       def cache_count_if_needed(count)
         if caching?
           key = "#{cache_key(klass)}_count"
-          Rails.cache.write(key, count)
+          Rails.cache.write(key, count, :time_to_live => expires_in)
           key
         end
       end
