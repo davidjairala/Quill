@@ -18,24 +18,21 @@ Or install it yourself as:
 
 ## Usage
 
-At this point it's pretty much a drop-in replacement for the [Kaminari gem](https://github.com/amatsuda/kaminari), on which this project is based and inspired by.
+At this point it's pretty similar to the [Kaminari gem](https://github.com/amatsuda/kaminari), on which this project is based and inspired by.
 
-    User.page(1)
-    User.page(2).per(10)
+    User.qpage(1)
+    User.qpage(2)
+    User.qpage(1).next_page?
+    User.qpage(2).previous_page?
 
 You can set up the following configuration options:
 
     default_per_page  - number of items per page (20 by default)
-    page_method_name  - page method name (page by defualt)
-    param_name        - param name (page by default)
-    cache_page        - determines if Quill will cache page and count results (true by default)
-    cache_expires_in  - cache time to live
 
 ## TODO
 
-* Read the cache instead of computing everytime
-* Caching for the per method is not ready yet, need to figure it out still.
 * View generators for the pagination fragments.
+* Cache all the things!
 
 ## Bugs or ideas?
 
