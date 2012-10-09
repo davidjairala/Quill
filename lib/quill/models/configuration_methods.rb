@@ -18,6 +18,11 @@ module Quill
         @_default_per_page ||= Quill.config.default_per_page
       end
 
+      # Big window size (per_page + 1)
+      def default_big_window
+        default_per_page + 1
+      end
+
     end
   end
 end

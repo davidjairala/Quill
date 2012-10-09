@@ -12,104 +12,42 @@ describe Quill::ActiveRecordExtension do
 
   describe "Users" do
 
-    describe "total_count" do
+    describe "pagination" do
 
-      it "should correctly get the total number of items in the set" do
-        User.page(6).total_count.should eql(105)
-      end
+      it "should correctly paginate" do
+        users = User.limit(20)
+        page = User.qpage(1)
 
-      it "should only run the count query once per instance" do
-        ActiveRecord::Relation.any_instance.expects(:count).returns(105).once
+        page.size.should eql(20)
+        page.class.should eql(ActiveRecord::Relation)
 
-        page = User.page(1)
 
-        page.total_count.should eql(105)
-        page.total_count.should eql(105)
-      end
-
-    end
-
-    describe "previous and next page" do
-
-      it "should correctly determine if there is a next page" do
-        User.page(1).next_page?.should be_true
-        User.page(6).next_page?.should be_false
-      end
-
-      it "should only count via DB once when checking for next page multiple times" do
-        ActiveRecord::Relation.any_instance.expects(:count).returns(105).once
-
-        page = User.page(1)
-        page.next_page?.should be_true
-        page.next_page?.should be_true
-      end
-
-      it "should correctly determine if there is a previous page" do
-        User.page(2).previous_page?.should be_true
-        User.page(1).previous_page?.should be_false
-      end
-
-    end
-
-    describe "caching" do
-
-      describe "page caching" do
-
-        it "should correctly determine the page cache key" do
-          User.cache_key(:page => 2).should eql('q_users_2_20')
-          User.cache_key(:page => 1).should eql('q_users_1_20')
-          User.cache_key(:page => 4, :per => 10).should eql('q_users_4_10')
+        page.each_with_index do |u, idx|
+          u.should eql(users[idx])
         end
+      end
 
-        it "should correctly set the page cache" do
-          key = User.cache_key(:page => 1)
-          User.page(1)
+      it "should grab other pages correctly" do
+        page = User.qpage(2)
 
-          cache_users = Rails.cache.read(key)
-          cache_users.should be_present
-
-          cache_users.size.should eql(20)
-
-          cache_users.each_with_index do |u, idx|
-            u.should eql(users[idx])
-          end
-        end
-
-        it "should correctly set the page cache for non-default values" do
-          key = User.cache_key(:page => 2)
-          User.page(2)
-
-          cache_users = Rails.cache.read(key)
-          cache_users.should be_present
-
-          cache_users.size.should eql(20)
-
-          cache_users.each_with_index do |u, idx|
-            i = idx + (20)
-            u.should eql(users[i])
-          end
-        end
-
+        page.size.should eql(20)
+        page.first.name.should eql("user-21")
       end
 
     end
 
-    it "should correctly get the total number of pages in the set" do
-      User.page(1).total_pages.should eql(6)
-    end
+    describe "pages" do
 
-    it "should allow overriding the number of results per page" do
-      User.page(1).per(10).size.should eql(10)
-    end
-
-    it "should correctly get a page of users" do
-      page = User.page(1)
-
-      page.size.should eql(20)
-
-      page.each_with_index do |u, idx|
-        u.should eql(users[idx])
+      it "should correctly identify if there's a next page" do
+        User.qpage(1).next_page?.should be_true
+        User.qpage(6).next_page?.should be_false
       end
+
+      it "should correctly identify if there's a previous page" do
+        User.qpage(1).previous_page?.should be_false
+        User.qpage(6).previous_page?.should be_true
+      end
+
     end
 
   end
