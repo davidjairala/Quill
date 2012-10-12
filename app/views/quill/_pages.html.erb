@@ -1,7 +1,7 @@
 <% if collection.try(:previous_page?) %>
-  <%= link_to('&laquo; Previous page'.html_safe, "?page=#{collection.previous_page}") %>
+  <%= previos_page_link(collection) %>
 <% end %>
 
 <% if collection.try(:next_page?) %>
-  <%= link_to('Next page &raquo;'.html_safe, "?page=#{collection.next_page}") %>
+  <%= next_page_link(collection) %>
 <% end %>

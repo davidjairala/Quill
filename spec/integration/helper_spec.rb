@@ -26,4 +26,16 @@ describe Quill::ActionViewExtension do
     response.should contain('Next page')
   end
 
+  it "should correctly move between pages" do
+    visit '/users'
+
+    click_link /next page/i
+
+    response.should contain(users[25].name)
+
+    click_link /previous page/i
+
+    response.should contain(users.first.name)
+  end
+
 end
