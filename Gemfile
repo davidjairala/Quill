@@ -1,4 +1,12 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in quill.gemspec
 gemspec
+
+gem 'bundler'
+gem 'rake'
+gem 'sqlite3'
+gem 'rspec'
+gem 'rspec-rails'
+gem 'database_cleaner'
+gem 'webrat'
+gem 'rdoc'

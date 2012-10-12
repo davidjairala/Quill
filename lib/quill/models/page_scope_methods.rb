@@ -13,6 +13,11 @@ module Quill
       @_q_next_page = val
     end
 
+    # Next page value
+    def next_page
+      current_page + 1
+    end
+
     # Determines if there is a previous page
     def previous_page?
       !!@_q_previous_page
@@ -21,6 +26,13 @@ module Quill
     # Previous page setter
     def previous_page=(val)
       @_q_previous_page = val
+    end
+
+    # Previous page value
+    def previous_page
+      prev_page = current_page - 1
+      return prev_page if prev_page > 0
+      0
     end
 
     # Total number of items in the set

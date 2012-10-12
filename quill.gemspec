@@ -15,18 +15,5 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = Quill::VERSION
 
-  gem.add_dependency 'activesupport', ['>= 3.0.0']
-  gem.add_dependency 'activerecord', ['>= 1.10.0']
-  gem.add_dependency 'actionpack', ['>= 3.0.0']
-  gem.add_dependency 'rails', ['>= 3.1.0']
-
-  gem.add_development_dependency 'bundler', ['>= 1.0.0']
-  gem.add_development_dependency 'rake', ['>= 0']
-  gem.add_development_dependency 'sqlite3', ['>= 0']
-  gem.add_development_dependency 'rspec', ['>= 0']
-  gem.add_development_dependency 'capybara', ['>= 1.0']
-  gem.add_development_dependency 'database_cleaner', ['>= 0']
-  gem.add_development_dependency 'rdoc', ['>= 0']
-  gem.add_development_dependency 'rdoc', ['>= 0']
-  gem.add_development_dependency 'mocha', ['>= 0.12.6']
+  gem.add_dependency 'rails',           ['~> 3.2.8']
 end
