@@ -18,12 +18,16 @@ Or install it yourself as:
 
 ## Usage
 
-At this point it's pretty similar to the [Kaminari gem](https://github.com/amatsuda/kaminari), on which this project is based and inspired by.
+At this point it's pretty similar to the [Kaminari gem](https://github.com/amatsuda/kaminari), on which this project is based on and inspired by.
 
     User.qpage(1)
     User.qpage(2)
     User.qpage(1).next_page?
     User.qpage(2).previous_page?
+
+To display the pagination links:
+
+    <%= qpaginate(@users) %>
 
 You can set up the following configuration options:
 
